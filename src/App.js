@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import Card from './Card';
+import Navbar from './Navbar';
+import { SkeletonTheme } from 'react-loading-skeleton'
 
 function App() {
+
+  const [post, setPost ] = useState([])
+
+useEffect(()=>{
+  fetch('https://jsonplaceholder.typicode.com/posts')
+  .then(res =>res.json())
+  .then(res2 =>setPost(res2))
+},[])
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar/>
+      <SkeletonTheme baseColor="#0f2020" highlightColor="#005444">
+      <div className='container'>
+       {post.map((value,index)=>(
+          <Card key={index} value={value}/>
+          ))}
+      </div>
+      </SkeletonTheme>
     </div>
   );
 }
